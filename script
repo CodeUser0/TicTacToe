@@ -1,0 +1,168 @@
+# NOTES
+# Game introduces tictactoe with brief description
+# Game ask if player would like to play, then asks which symbol they would like to play as (X or O)
+# game then asks player 1 where the would like to place their symbol, followed by player 2
+# checks for tie, and wins and ends the game indicating which player is victorious
+
+# --------- need to do ----------
+# finish diagonal wins
+# play again, hence keep track of scores
+# let players name themselves
+# undo moves
+
+import time
+
+moves = 0
+# introduction
+print("Welcome to Tic Tac Toe!")
+print("Tic-Tac-Toe, also known as Noughts and Crosses, is a classic two-player strategy game played on a 3x3 grid. "
+      "Players take turns placing their symbols (usually 'x' and '0') on the grid, aiming to create a row, column, "
+      "or diagonal of three of their symbols to win. It's a simple yet engaging game often enjoyed by children and "
+      "adults alike.")
+time.sleep(1)
+game = input("\nWould you like to start? (Y/N): ")
+
+# setting up the symbol for player 1
+if game.lower() in ["y", "ye", "yes", "yea", "yeah"]:
+    print("Please choose your symbol...")
+    chosen_symbol = input("Type 'X' if you would like to play as X \nType 'O' if you would like to play as O: ")
+
+    while chosen_symbol.lower() != "x" and chosen_symbol.lower() != "o":
+        chosen_symbol = input("Type 'X' if you would like to play as X \nType 'O' if you would like to play as O: ")
+
+else:
+    print("Goodbye!")
+
+# setting up the symbol for player 2
+non_chosen_symbol = ""
+if chosen_symbol.lower() == "x":
+    non_chosen_symbol = "o"
+else:
+    non_chosen_symbol = "x"
+print("\n")
+print(f"Player's 1 symbol {chosen_symbol.upper()} and player 2's symbol is {non_chosen_symbol.upper()}")
+
+# setting up the board
+row_0 = [" ", "|", " ", "|", " "]
+row_1 = [" ", "|", " ", "|", " "]
+row_2 = [" ", "|", " ", "|", " "]
+gap = ["---------"]
+
+
+def board():
+    print("\n")
+    print(*row_0)
+    print(*gap)
+    print(*row_1)
+    print(*gap)
+    print(*row_2)
+
+
+while game.lower() in ["y", "yes", "yea", "ye", "yeah"]:
+
+    # if moves reach 9, with no winner then game ends in a tie
+    if moves == 9:
+        print("\n")
+        print("The game has reached a tie and has ended!")
+        break
+
+    print("\n")  # asking player 1 to input their chosen spot
+    print("For player 1")
+    chosen_row = int(input("Enter your chosen row (0,1 or 2): "))
+    chosen_column = int(input("Enter your chosen column (0,2 or 4): "))
+
+    # puts symbol in chosen spot and checks if there's a symbol in it before
+    if chosen_column in [0, 2, 4] and 0 <= chosen_row <= 2:
+        if chosen_row == 0 and row_0[chosen_column] == " ":
+            row_0[chosen_column] = chosen_symbol
+            moves += 1
+        elif chosen_row == 1 and row_1[chosen_column]:
+            row_1[chosen_column] = chosen_symbol
+            moves += 1
+        elif chosen_row == 2 and row_2[chosen_column]:
+            row_2[chosen_column] = chosen_symbol
+            moves += 1
+        else:
+            print("There is already a symbol there, please try again.")
+            continue
+        board()
+    else:
+        print("Invalid row or column, please try again.")
+        continue
+
+    # check for horizontal wins for player 1-----------------------------------
+    if row_0[0] == row_0[2] == row_0[4] == chosen_symbol:
+        print("\nThe game has ended! Player 1 is victorious with a horizontal row!")
+        break
+    if row_1[0] == row_1[2] == row_1[4] == chosen_symbol:
+        print("\nThe game has ended! Player 1 is victorious with a horizontal row!")
+        break
+    if row_2[0] == row_2[2] == row_2[4] == chosen_symbol:
+        print("\nThe game has ended! Player 1 is victorious with a horizontal row!")
+        break
+
+    # check for vertical wins for player 1--------------------------------------
+    if row_0[0] == row_1[0] == row_2[0] == chosen_symbol:
+        print("\nThe game has ended! Player 1 is victorious with a vertical row!")
+        break
+    if row_0[2] == row_1[2] == row_2[2] == chosen_symbol:
+        print("\nThe game has ended! Player 1 is victorious with a vertical row!")
+        break
+    if row_0[4] == row_1[4] == row_2[4] == chosen_symbol:
+        print("\nThe game has ended! Player 1 is victorious with a vertical row!")
+        break
+    # check for diagonal wins for player 1
+
+    if moves == 9:
+        print("\n")
+        print("The game has reached a tie and has ended!")
+        break
+
+    while True:
+        print("\n")
+        print("For player 2")
+        chosen_row = int(input("Enter your chosen row (0,1 or 2): "))
+        chosen_column = int(input("Enter your chosen column (0,2 or 4): "))
+
+        # puts symbol in chosen spot and checks if there's a symbol in it before
+        if chosen_column in [0, 2, 4] and 0 <= chosen_row <= 2:
+            if chosen_row == 0 and row_0[chosen_column] == " ":
+                row_0[chosen_column] = non_chosen_symbol
+                moves += 1
+            elif chosen_row == 1 and row_1[chosen_column]:
+                row_1[chosen_column] = non_chosen_symbol
+                moves += 1
+            elif chosen_row == 2 and row_2[chosen_column]:
+                row_2[chosen_column] = non_chosen_symbol
+                moves += 1
+            else:
+                print("There is already a symbol there, please try again")
+                continue
+            board()
+            break
+        else:
+            print("Invalid row or column, please try again.")
+            continue
+
+    # check for horizontal wins for player 2---------------------------
+    if row_0[0] == row_0[2] == row_0[4] == non_chosen_symbol:
+        print("\nThe game has ended! Player 2 is victorious with a horizontal row!")
+        break
+    if row_1[0] == row_1[2] == row_1[4] == non_chosen_symbol:
+        print("\nThe game has ended! Player 2 is victorious with a horizontal row!")
+        break
+    if row_2[0] == row_2[2] == row_2[4] == non_chosen_symbol:
+        print("\nThe game has ended! Player 2 is victorious with a horizontal row!")
+        break
+
+    # check for vertical wins for player 2------------------------
+    if row_0[0] == row_1[0] == row_2[0] == non_chosen_symbol:
+        print("\nThe game has ended! Player 2 is victorious with a vertical row!")
+        break
+    if row_0[2] == row_1[2] == row_2[2] == non_chosen_symbol:
+        print("\nThe game has ended! Player 2 is victorious with a vertical row!")
+        break
+    if row_0[4] == row_1[4] == row_2[4] == non_chosen_symbol:
+        print("\nThe game has ended! Player 2 is victorious with a vertical row!")
+        break
+# check for diagonal wins for player 2
